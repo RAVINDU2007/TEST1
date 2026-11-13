@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VEXORE - Wear Different</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+header{background:#000;color:#fff;padding:16px 5%;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
+header h1{font-size:24px;letter-spacing:4px;font-weight:900}
+header h1 span{color:#c8ff00}
+nav a{color:#fff;text-decoration:none;margin-left:20px;font-size:14px}
+.hero{background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),url('https://images.unsplash.com/photo-1445205170230-053b83016050?w=1200');background-size:cover;background-position:center;height:450px;display:flex;flex-direction:column;justify-content:center;align-items:center;color:#fff;text-align:center;padding:20px}
+.hero small{letter-spacing:4px;color:#c8ff00}
+.hero h2{font-size:52px;margin:10px 0;line-height:1}
+.hero p{font-size:16px;margin-bottom:22px;color:#ddd}
+.btn{background:#c8ff00;color:#000;padding:13px 28px;border:none;border-radius:30px;font-size:16px;font-weight:bold;cursor:pointer}
+.section{padding:40px 5%}
+.section h2{text-align:center;margin-bottom:5px;font-size:28px}
+.section p.sub{text-align:center;color:#777;margin-bottom:25px}
+.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px}
+.card{border:1px solid #eee;border-radius:14px;overflow:hidden;background:#fff;box-shadow:0 2px 12px rgba(0,0,0,0.08)}
+.card img{width:100%;height:280px;object-fit:cover}
+.card-body{padding:15px}
+.card-body h3{font-size:16px}
+.card-body p{color:#777;font-size:13px;margin:5px 0}
+.price{font-weight:bold;font-size:18px}
+.price s{color:#999;font-size:14px;font-weight:normal}
+.badge{background:#c8ff00;font-size:11px;padding:3px 8px;border-radius:10px;font-weight:bold}
+.sizes{margin:10px 0}
+.sizes button{padding:6px 11px;margin-right:5px;border:1px solid #ddd;background:#fff;cursor:pointer;border-radius:6px}
+.sizes button.active{background:#000;color:#fff}
+.add{width:100%;background:#000;color:#fff;border:none;padding:11px;border-radius:9px;cursor:pointer;margin-top:10px;font-weight:bold}
+.add:hover{background:#333}
+.cart-bar{position:fixed;bottom:20px;right:20px;background:#000;color:#fff;padding:14px 20px;border-radius:30px;cursor:pointer;box-shadow:0 5px 20px rgba(0,0,0,0.4);z-index:20}
+.cart-bar b{color:#c8ff00}
+footer{background:#000;color:#aaa;text-align:center;padding:25px;font-size:14px;line-height:1.8}
+input,select{padding:11px;width:100%;margin:8px 0;border:1px solid #ddd;border-radius:9px}
+@media(max-width:600px){.hero h2{font-size:34px}}
+</style>
+</head>
+<body>
+
+<header>
+<h1>VEX<span>ORE</span></h1>
+<nav><a href="#">Home</a><a href="#shop">Shop</a><a href="#order">Order</a></nav>
+</header>
+
+<div class="hero">
+<small>VEXORE • NEW DROP</small>
+<h2>WEAR<br>DIFFERENT.</h2>
+<p>Oversized Tees | Denim | Streetwear - Island Wide Delivery</p>
+<button class="btn" onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'})">Shop New Drop ↓</button>
+</div>
+
+<div class="section" id="shop">
+<h2>VEXORE COLLECTION</h2>
+<p class="sub">Best Sellers - Limited Stock</p>
+<div class="products" id="products"></div>
+</div>
+
+<div class="section" id="order" style="background:#f4f4f4">
+<h2>Quick Order</h2>
+<p class="sub">Form eka fill karanna, order eka WhatsApp ekata yai</p>
+<div style="max-width:500px;margin:auto;background:#fff;padding:22px;border-radius:14px">
+<input id="cName" placeholder="Oyaage Nama">
+<input id="cPhone" placeholder="Phone Number">
+<input id="cAddress" placeholder="Address / City">
+<select id="cPay"><option>Cash on Delivery</option><option>Bank Transfer</option><option>KOKO</option></select>
+<p id="orderSummary" style="font-size:14px;margin:10px 0;font-weight:bold"></p>
+<button class="btn" style="width:100%;background:#000;color:#c8ff00" onclick="placeOrder()">Order Now on WhatsApp</button>
+</div>
+</div>
+
+<div class="cart-bar" onclick="showCart()">🛒 Cart: <span id="cartCount">0</span> - <b>Rs. <span id="cartTotal">0</span></b></div>
+
+<footer>
+<b style="color:#fff;font-size:18px;letter-spacing:3px">VEXORE</b><br>
+Wear Different | Colombo, Sri Lanka<br>
+WhatsApp: 077 XXX XXXX | Instagram: @vexore.lk | TikTok: @vexore.lk
+</footer>
+
+<script>
+const items=[
+{name:"VEXORE Oversized Tee - Black",cat:"Oversized Tee",price:2490,old:3490,img:"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600"},
+{name:"VEXORE Baggy Jeans",cat:"Denim",price:4950,old:6500,img:"https://images.unsplash.com/photo-1542272604-787c3835535d?w=600"},
+{name:"VEXORE Hoodie - Grey",cat:"Hoodie",price:4550,old:5500,img:"https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=600"},
+{name:"VEXORE Denim Jacket",cat:"Jacket",price:5950,old:7950,img:"https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600"},
+{name:"VEXORE Cargo Pant",cat:"Cargo",price:5250,old:6800,img:"https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=600"},
+{name:"VEXORE Formal Shirt",cat:"Shirt",price:3290,old:4290,img:"https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=600"},
+{name:"VEXORE Crop Top",cat:"Top",price:1950,old:2650,img:"https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?w=600"},
+{name:"VEXORE Summer Frock",cat:"Frock",price:3950,old:4950,img:"https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600"},
+];
+let cart=[];
+let box=document.getElementById('products');
+items.forEach((p,i)=>{
+box.innerHTML+=`<div class="card"><img src="${p.img}"><div class="card-body"><span class="badge">NEW</span><h3 style="margin-top:6px">${p.name}</h3><p>${p.cat}</p><div class="price">Rs. ${p.price} <s>${p.old}</s></div><div class="sizes"><button onclick="sel(this)">S</button><button onclick="sel(this)">M</button><button onclick="sel(this)">L</button><button onclick="sel(this)">XL</button></div><button class="add" onclick="addCart(${i})">Add to Cart</button></div></div>`;
+});
+function sel(el){el.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('active'));el.classList.add('active')}
+function addCart(i){cart.push(items[i]);updateCart();alert(items[i].name+" added!")}
+function updateCart(){let t=cart.reduce((a,b)=>a+b.price,0);document.getElementById('cartCount').innerText=cart.length;document.getElementById('cartTotal').innerText=t;document.getElementById('orderSummary').innerText="Items: "+cart.length+" | Total: Rs. "+t;}
+function showCart(){if(cart.length==0){alert("Cart eka empty!");return}alert(cart.map(c=>c.name+" - Rs."+c.price).join("\n")+"\nTotal: Rs."+cart.reduce((a,b)=>a+b.price,0))}
+function placeOrder(){let n=document.getElementById('cName').value;let ph=document.getElementById('cPhone').value;let ad=document.getElementById('cAddress').value;if(!n||!ph){alert("Nama saha Phone eka danna");return}let msg="Hello VEXORE! New Order:%0A"+cart.map(c=>c.name).join("%0A")+"%0AName: "+n+"%0APhone: "+ph+"%0AAddress: "+ad;window.open("https://wa.me/9477XXXXXXX?text="+msg)}
+</script>
+</body>
+</html>
